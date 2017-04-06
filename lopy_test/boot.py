@@ -4,10 +4,6 @@ import os
 uart = machine.UART(0, 115200)
 os.dupterm(uart)
 
-# Join known WLAN or create own
-import network
-import binascii
-
 #known_nets = {
 #}
 #
@@ -39,5 +35,3 @@ import binascii
 #        print("Failed to connect to any known network, going into AP mode")
 #        wl.init(mode=network.WLAN.AP, ssid=original_ssid, auth=original_auth, channel=6, antenna=network.WLAN.INT_ANT)
 
-lora = network.LoRa(mode=network.LoRa.LORAWAN)
-print("My LoRa device ID is %s" % binascii.hexlify(lora.mac())) 

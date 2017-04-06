@@ -15,7 +15,10 @@ from config import  APP_KEY
 
 class connectionmanager:
     def __init__(self):
-            self.lora = LoRa(mode=LoRa.LORAWAN)
+            self.lora = LoRa(mode=LoRa.LORAWAN,  adr=True)
+            self.lora.power_mode(LoRa.ALWAYS_ON)
+            print("Hello world!")
+            print("My LoRa device ID is %s" % binascii.hexlify(self.lora.mac())) 
             app_eui = binascii.unhexlify(APP_EUI.replace(' ',''))
             app_key = binascii.unhexlify(APP_KEY.replace(' ',''))
             self.lora.join(activation=LoRa.OTAA, auth=(app_eui, app_key), timeout=0)
@@ -38,9 +41,10 @@ class connectionmanager:
             if msg:
                 print("Got message %s" % repr(msg))
                 pycom.rgbled(struct.unpack('<i', binascii.unhexlify(msg))[0])
-            if time.time() - last_uplink > 5:
+            if time.time() - last_uplink > 60:
+                print("time is {}, sending uplink".format(time.time()))
                 self.s.setblocking(True)
-                self.s.send('Still alive!')
+                self.s.send('Still alive! {}'.format(time.time()))
                 self.s.setblocking(False)
                 last_uplink = time.time()
             else:
